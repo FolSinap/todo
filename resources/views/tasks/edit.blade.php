@@ -19,7 +19,10 @@
             class="border border-black rounded-md px-4 py-2 focus:border-blue-500 self-auto">
           <button type="submit" title="Complete" class="ml-4 text-green-300 hover:text-green-400"><i class="fas fa-check fa-2x"></i></button>
         </div>
-        <textarea name="description" class="w-1/2 border border-black rounded-md px-4 py-2" placeholder="Add description">{{ $task->description }}</textarea>
+        <label for="deadline">Set deadline:</label>
+        <input id="deadline" type="date" name="deadline" value="{{ $task->fail_at }}" placeholder="Today by default" min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d', strtotime('+1 year')) }}"
+          class="ml-2 rounded-lg border border-black mb-2 p-1">
+        <textarea name="description" class="md:w-3/4 border border-black rounded-md px-4 py-2" placeholder="Add description">{{ $task->description }}</textarea>
       </form>
       @error ('title')
         <p class="text-red-400">{{ $message }}</p>

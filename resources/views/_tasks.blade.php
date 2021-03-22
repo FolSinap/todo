@@ -1,23 +1,22 @@
 <div class="my-4">
   @forelse ($tasks as $task)
     <div class="{{ $loop->last ? 'border-b' : '' }}
-      {{ $task->state ? 'line-through bg-green-100 hover:bg-green-200' : 'hover:bg-blue-200' }}
+      {{-- {{ $task->state ? 'line-through bg-green-100 hover:bg-green-200' : 'hover:bg-blue-200' }} --}}
+      @if ($task->state && !$task->fail_at < date('Y-m-d'))
+        bg-green-100 hover:bg-green-200
+      @elseif ($task->fail_at < date('Y-m-d'))
+        bg-yellow-100 hover:bg-yellow-200
+      @else
+        hover:bg-blue-200
+      @endif
       border-t border-gray-400  py-2 px-4 flex justify-between text-left">
       <div class="flex items-center">
-        <form action="/tasks/{{ $task->id }}/done" method="post" class="mr-3">
-            @csrf
-            @method('patch')
-            <button type="submit" title="Check">
-              @if ($task->state)
-                <i class="fas fa-redo text-blue-500 hover:text-blue-700"></i>
-              @else
-                <i class="fas fa-check text-green-200 hover:text-green-400"></i>
-              @endif
-            </button>
-        </form>
+        @if( !($task->fail_at < date('Y-m-d')) )
+          @include('_check-restore-buttons')
+        @endif
         @if(!is_null($task->description))
           <details>
-            <summary class="cursor-pointer {{ $task->state ? 'no-underline' : '' }}">
+            <summary class="cursor-pointer {{ $task->state ? 'line-through' : '' }}">
               {{ $task->title }}
               @if ($task->priority === 2)
                 <i class="fas fa-circle ml-2 text-green-300 fa-xs" title="Low"></i>
@@ -30,7 +29,7 @@
             {{ $task->description }}
           </details>
         @else
-          <span class="{{ $task->state ? 'no-underline' : '' }}">
+          <span class="{{ $task->state ? 'line-through' : '' }}">
             {{ $task->title }}
             @if ($task->priority === 2)
               <i class="fas fa-circle ml-2 text-green-300 fa-xs" title="Low"></i>
@@ -42,15 +41,17 @@
           </span>
         @endif
       </div>
+      @if ( $task->fail_at < date('Y-m-d') && !$task->state )
+        <span class="italic text-red-500">failed {{ $task->fail_at }}</span>
+      @endif
+      @if ( $task->state )
+        <span class="italic text-green-500">checked {{ $task->checked_at }}</span>
+      @endif
       <div class="flex">
-        @if ( !$task->state )
+        @if ( !$task->state && !($task->fail_at < date('Y-m-d')) )
           <a href="/tasks/{{ $task->id }}/edit" class="mr-3" title="Edit"><i class="fas fa-edit text-blue-500 hover:text-blue-700"></i></a>
         @endif
-        <form action="/tasks/{{ $task->id }}/delete" method="post">
-          @csrf
-          @method('delete')
-          <button type="submit" title="Delete"><i class="fas fa-trash text-red-300 hover:text-red-500"></i></button>
-        </form>
+        @include('_delete-button')
       </div>
     </div>
   @empty

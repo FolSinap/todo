@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TasksController;
+use App\Http\Controllers\TasksUpdateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,6 @@ Route::middleware('auth')->group(function(){
   Route::get('/tasks/{task}/edit', [TasksController::class, 'edit']);
   Route::patch('/tasks/{task}/edit', [TasksController::class, 'update']);
 
-  Route::patch('/tasks/{task}/done', [TasksController::class, 'done']);
-  Route::delete('/tasks/clear', [TasksController::class, 'clear']);
+  Route::patch('/tasks/{task}/update', [TasksUpdateController::class, 'update']);
+  Route::delete('/tasks/delete', [TasksUpdateController::class, 'destroy']);
 });

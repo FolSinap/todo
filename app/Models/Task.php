@@ -11,11 +11,4 @@ class Task extends Model
 
     protected $guarded = [];
 
-    public function toggleCheck(){
-      if ($this->state) {
-        return false;
-      }else {
-        return true;
-      }
-    }
 }
