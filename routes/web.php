@@ -24,10 +24,10 @@ Auth::routes();
 Route::middleware('auth')->group(function(){
   Route::get('/tasks', [TasksController::class, 'index'])->name('home');
   Route::post('/tasks', [TasksController::class, 'store']);
-  Route::delete('/tasks/{task}/delete', [TasksController::class, 'destroy']);
-  Route::get('/tasks/{task}/edit', [TasksController::class, 'edit']);
-  Route::patch('/tasks/{task}/edit', [TasksController::class, 'update']);
+  Route::delete('/tasks/{task}/delete', [TasksController::class, 'destroy'])->middleware('can:delete,task');
+  Route::get('/tasks/{task}/edit', [TasksController::class, 'edit'])->middleware('can:edit,task');
+  Route::patch('/tasks/{task}/edit', [TasksController::class, 'update'])->middleware('can:edit,task');
 
-  Route::patch('/tasks/{task}/update', [TasksUpdateController::class, 'update']);
+  Route::patch('/tasks/{task}/update', [TasksUpdateController::class, 'update'])->middleware('can:edit,task');
   Route::delete('/tasks/delete', [TasksUpdateController::class, 'destroy']);
 });

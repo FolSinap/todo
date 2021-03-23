@@ -1,4 +1,4 @@
-<div class="my-4">
+<div class="my-4 text-xs md:text-base">
   @forelse ($tasks as $task)
     <div class="{{ $loop->last ? 'border-b' : '' }}
       {{-- {{ $task->state ? 'line-through bg-green-100 hover:bg-green-200' : 'hover:bg-blue-200' }} --}}
